@@ -19,7 +19,7 @@ export default function NavbarLink({ href, label, icon: Icon }: IProps) {
       href={href}
       className={`flex items-center gap-1.5 px-3 py-2 rounded-md  font-medium transition-all duration-150 ${
   isActive
-    ? 'text-accent-2 bg-accent-soft'
+    ? 'text-accent-soft bg-accent'
     : 'text-text-muted hover:text-text hover:bg-raised'
 }`}
     >
