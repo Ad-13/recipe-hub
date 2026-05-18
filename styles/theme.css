@@ -1,0 +1,28 @@
+@theme {
+  --font-display: "Outfit", sans-serif;
+  --font-body:    "Plus Jakarta Sans", sans-serif;
+
+  --color-bg:          #1C2128;
+  --color-surface:     #252D38;
+  --color-raised:      #2E3844;
+  --color-border:      #3D4D5C;
+  --color-border-2:    #546070;
+
+  --color-text:        #F2EAD8;
+  --color-text-muted:  #A8B8C0;
+  --color-text-dim:    #546070;
+
+  --color-accent:      #E8A83A;
+  --color-accent-2:    #F0C060;
+  --color-accent-soft: #2A2414;
+
+  --color-sage:        #5BA88A;
+  --color-sage-soft:   #162420;
+  --color-amber:       #D4824A;
+  --color-amber-soft:  #2A1A10;
+
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+}

@@ -1,0 +1,28 @@
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    min-height: 100svh;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 55% 40% at 80% 5%,  rgba(232, 168, 58, 0.10) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 35% at 10% 85%, rgba(91, 168, 138, 0.07) 0%, transparent 55%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }
+  a       { color: inherit; text-decoration: none; }
+  button  { cursor: pointer; font-family: inherit; }
+  input, textarea, select { font-family: inherit; }
+}
