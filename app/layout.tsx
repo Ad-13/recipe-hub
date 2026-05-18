@@ -1,19 +1,21 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next'
+import './globals.css'
+import Navbar from '@/components/layout/Navbar'
 
 export const metadata: Metadata = {
-  title: "Recipe Hub",
-  description: "Search, save, and annotate your favourite recipes.",
-};
+  title: 'Recipe Hub',
+  description: 'Search, save, and annotate your favourite recipes.',
+}
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" className="h-full">
+      <body className="flex flex-col min-h-full">
+        <Navbar />
+        <main className="flex-1 pt-15">
+          {children}
+        </main>
+      </body>
     </html>
-  );
+  )
 }

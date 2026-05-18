@@ -13,7 +13,7 @@ export async function initializeDatabase(): Promise<void> {
       cook_time   INTEGER NOT NULL DEFAULT 0,
       servings    INTEGER NOT NULL DEFAULT 4,
       difficulty  TEXT NOT NULL DEFAULT 'medium',
-      cuisine     TEXT NOT NULL DEFAULT 'other',
+      kitchen     TEXT NOT NULL DEFAULT 'other',
       meal_type   TEXT NOT NULL DEFAULT 'dinner',
       tags        TEXT[] NOT NULL DEFAULT '{}',
       ingredients JSONB NOT NULL DEFAULT '[]',
