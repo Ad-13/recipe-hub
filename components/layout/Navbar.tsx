@@ -1,9 +1,8 @@
-const Navbar = () => {
-  return (
-    <div>
-      
-    </div>
-  );
-}
+export function Navbar() {
 
-export default Navbar;
+  return (
+    <nav
+    >Navbar
+    </nav>
+  )
+}
