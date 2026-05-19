@@ -51,7 +51,7 @@ async function seedRecipes(): Promise<void> {
     await sql`
       INSERT INTO recipes (
         title, description, image_url, prep_time, cook_time, servings,
-        difficulty, cuisine, meal_type, tags, ingredients, instructions, nutrition
+        difficulty, kitchen, meal_type, tags, ingredients, instructions, nutrition
       ) VALUES (
         ${r.title}, ${r.description}, ${r.image_url},
         ${r.prep_time}, ${r.cook_time}, ${r.servings},
