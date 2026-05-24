@@ -51,7 +51,7 @@ async function seedRecipes(): Promise<void> {
     await sql`
       INSERT INTO recipes (
         title, description, image_url, prep_time, cook_time, servings,
-        difficulty, cuisine, meal_type, tags, ingredients, instructions, nutrition
+        difficulty, kitchen, meal_type, tags, ingredients, instructions, nutrition
       ) VALUES (
         ${r.title}, ${r.description}, ${r.image_url},
         ${r.prep_time}, ${r.cook_time}, ${r.servings},
@@ -220,35 +220,6 @@ function getSeedRecipes() {
         'Serve immediately with a scoop of vanilla ice cream and remaining sauce spooned over.',
       ],
       nutrition: { calories: 480, protein: 12, carbs: 58, fat: 22 },
-    },
-    {
-      title: 'Avocado Toast with Poached Eggs',
-      description: 'The breakfast that conquered the world — creamy avocado on sourdough with perfectly silky poached eggs and everything bagel seasoning.',
-      image_url: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?w=800&q=80',
-      prep_time: 10, cook_time: 8, servings: 2,
-      difficulty: Difficulty.Easy, kitchen: Kitchen.American, meal_type: MealType.Breakfast,
-      tags: ['breakfast', 'eggs', 'avocado', 'vegetarian', 'quick'],
-      ingredients: [
-        { amount: '2', unit: 'thick slices', name: 'sourdough bread' },
-        { amount: '2', unit: '', name: 'ripe avocados' },
-        { amount: '4', unit: '', name: 'large eggs' },
-        { amount: '1', unit: '', name: 'lemon, juiced' },
-        { amount: '2', unit: 'tsp', name: 'white wine vinegar' },
-        { amount: '1', unit: 'tsp', name: 'everything bagel seasoning' },
-        { amount: '1', unit: 'pinch', name: 'chili flakes' },
-        { amount: '', unit: '', name: 'flaky sea salt and black pepper' },
-        { amount: '1', unit: 'handful', name: 'microgreens or watercress' },
-      ],
-      instructions: [
-        'Toast sourdough slices until deeply golden and crisp.',
-        'Mash avocados with lemon juice, salt, and pepper. Keep it chunky — not a smooth paste.',
-        'Bring a wide pan of water to a gentle simmer. Add white wine vinegar.',
-        'Crack each egg into a small cup. Create a gentle whirlpool in the water and slide eggs in one at a time.',
-        'Poach 3-4 minutes for runny yolks. Remove with a slotted spoon and drain on paper towel.',
-        'Spread avocado generously on toast. Place two poached eggs on each slice.',
-        'Finish with everything bagel seasoning, chili flakes, microgreens, and a drizzle of good olive oil.',
-      ],
-      nutrition: { calories: 420, protein: 18, carbs: 32, fat: 28 },
     },
     {
       title: 'Greek Mezze Platter',

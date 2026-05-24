@@ -1,4 +1,5 @@
 import { neon } from '@neondatabase/serverless'
+import { ActionResult } from '@/types'
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL environment variable is not set')
@@ -10,7 +11,7 @@ export const sql = neon(process.env.DATABASE_URL)
 export async function query<T>(
   strings: TemplateStringsArray,
   ...values: unknown[]
-): Promise<T[]> {
-  const result = await sql(strings, ...values)
-  return result as T[]
+): Promise<ActionResult<T>> {
+  const results = await sql(strings, ...values)
+  return { data: results as T }
 }

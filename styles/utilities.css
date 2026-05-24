@@ -1,17 +1,81 @@
 @layer utilities {
-  @keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes slide-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes toast-in { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  @keyframes skeleton-pulse { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  @keyframes skeleton-pulse {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes fade-slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-  .animate-fade-in  { animation: fade-in  0.35s ease both; }
-  .animate-slide-up { animation: slide-up 0.4s  ease both; }
-  .animate-spin     { animation: spin 1s linear infinite; }
-  .toast-enter      { animation: toast-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .stagger-item {
+    animation: fade-slide-up 0.4s ease both;
+    animation-delay: calc(var(--index) * 80ms);
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.35s ease both;
+  }
+  .animate-slide-up {
+    animation: slide-up 0.4s ease both;
+  }
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+  .toast-enter {
+    animation: toast-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
 
   .img-skeleton {
-    background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-raised) 50%, var(--color-surface) 75%);
+    background: linear-gradient(
+      90deg,
+      var(--color-surface) 25%,
+      var(--color-raised) 50%,
+      var(--color-surface) 75%
+    );
     background-size: 200% 100%;
     animation: skeleton-pulse 1.5s ease-in-out infinite;
   }
