@@ -4,7 +4,9 @@ import Link from "next/link";
 import { ArrowLeft, Clock, Users, ChefHat, Flame } from "lucide-react";
 import { getRecipeById } from "@/actions/recipes";
 import { getSession } from "@/actions/auth";
+import { isInCookbook } from "@/actions/cookbook";
 import { formatTime, capitalize, difficultyStyle } from "@/utils";
+import AddToCookbookButton from "@/components/recipe/AddToCookbookButton";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -12,9 +14,10 @@ interface Props {
 
 export default async function RecipeDetailPage({ params }: Props) {
   const { id } = await params;
-  const [recipe, session] = await Promise.all([
+  const [recipe, session, cookbookStatus] = await Promise.all([
     getRecipeById(id),
     getSession(),
+    isInCookbook(id),
   ]);
 
   if (!recipe) notFound();
@@ -99,7 +102,11 @@ export default async function RecipeDetailPage({ params }: Props) {
         </div>
 
         {session && (
-          <div className="shrink-0">{/* TODO: AddToCookbookButton */}</div>
+          <AddToCookbookButton
+            recipeId={recipe.id}
+            initialSaved={cookbookStatus.saved}
+            cookbookItemId={cookbookStatus.id}
+          />
         )}
       </div>
 
