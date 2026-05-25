@@ -2,44 +2,49 @@ import { sql } from './db'
 import { Difficulty, Kitchen, MealType } from '@/types'
 
 export async function initializeDatabase(): Promise<void> {
-  // Create recipes table
+  await sql`
+    CREATE TABLE IF NOT EXISTS users (
+      id            UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+      email         TEXT        NOT NULL UNIQUE,
+      password_hash TEXT        NOT NULL,
+      name          TEXT        NOT NULL,
+      created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `
+
   await sql`
     CREATE TABLE IF NOT EXISTS recipes (
-      id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-      title       TEXT NOT NULL,
-      description TEXT NOT NULL,
-      image_url   TEXT NOT NULL DEFAULT '',
-      prep_time   INTEGER NOT NULL DEFAULT 0,
-      cook_time   INTEGER NOT NULL DEFAULT 0,
-      servings    INTEGER NOT NULL DEFAULT 4,
-      difficulty  TEXT NOT NULL DEFAULT 'medium',
-      kitchen     TEXT NOT NULL DEFAULT 'other',
-      meal_type   TEXT NOT NULL DEFAULT 'dinner',
-      tags        TEXT[] NOT NULL DEFAULT '{}',
-      ingredients JSONB NOT NULL DEFAULT '[]',
-      instructions TEXT[] NOT NULL DEFAULT '{}',
-      nutrition   JSONB NOT NULL DEFAULT '{}',
-      created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      id           UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+      title        TEXT        NOT NULL,
+      description  TEXT        NOT NULL,
+      image_url    TEXT        NOT NULL DEFAULT '',
+      prep_time    INTEGER     NOT NULL DEFAULT 0,
+      cook_time    INTEGER     NOT NULL DEFAULT 0,
+      servings     INTEGER     NOT NULL DEFAULT 4,
+      difficulty   TEXT        NOT NULL DEFAULT 'medium',
+      kitchen      TEXT        NOT NULL DEFAULT 'other',
+      meal_type    TEXT        NOT NULL DEFAULT 'dinner',
+      tags         TEXT[]      NOT NULL DEFAULT '{}',
+      ingredients  JSONB       NOT NULL DEFAULT '[]',
+      instructions TEXT[]      NOT NULL DEFAULT '{}',
+      nutrition    JSONB       NOT NULL DEFAULT '{}',
+      created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `
 
-  // Create cookbook_items table
   await sql`
     CREATE TABLE IF NOT EXISTS cookbook_items (
-      id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-      recipe_id  UUID NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
-      notes      TEXT NOT NULL DEFAULT '',
+      id         UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+      user_id    UUID        NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      recipe_id  UUID        NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
+      notes      TEXT        NOT NULL DEFAULT '',
       added_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      UNIQUE(recipe_id)
+      UNIQUE(user_id, recipe_id)
     )
   `
 
-  // Check if already seeded
-  const existing = await sql`SELECT COUNT(*)::int AS count FROM recipes`
-  if ((existing[0] as { count: number }).count > 0) {
-    console.log('Database already seeded, skipping.')
-    return
-  }
+  const [{ count }] = await sql`SELECT COUNT(*)::int AS count FROM recipes` as { count: number }[]
+  if (count > 0) return
 
   await seedRecipes()
 }
