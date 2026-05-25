@@ -1,8 +1,8 @@
-import { sql } from './db'
+import { query } from './db'
 import { Difficulty, Kitchen, MealType } from '@/types'
 
 export async function initializeDatabase(): Promise<void> {
-  await sql`
+  await query`
     CREATE TABLE IF NOT EXISTS users (
       id            UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
       email         TEXT        NOT NULL UNIQUE,
@@ -12,7 +12,7 @@ export async function initializeDatabase(): Promise<void> {
     )
   `
 
-  await sql`
+  await query`
     CREATE TABLE IF NOT EXISTS recipes (
       id           UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
       title        TEXT        NOT NULL,
@@ -32,7 +32,7 @@ export async function initializeDatabase(): Promise<void> {
     )
   `
 
-  await sql`
+  await query`
     CREATE TABLE IF NOT EXISTS cookbook_items (
       id         UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
       user_id    UUID        NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -43,7 +43,7 @@ export async function initializeDatabase(): Promise<void> {
     )
   `
 
-  const [{ count }] = await sql`SELECT COUNT(*)::int AS count FROM recipes` as { count: number }[]
+  const [{ count }] = await query`SELECT COUNT(*)::int AS count FROM recipes` as { count: number }[]
   if (count > 0) return
 
   await seedRecipes()
@@ -53,7 +53,7 @@ async function seedRecipes(): Promise<void> {
   const recipes = getSeedRecipes()
 
   for (const r of recipes) {
-    await sql`
+    await query`
       INSERT INTO recipes (
         title, description, image_url, prep_time, cook_time, servings,
         difficulty, kitchen, meal_type, tags, ingredients, instructions, nutrition
