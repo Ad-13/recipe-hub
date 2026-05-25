@@ -1,21 +1,32 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import { ChefHat, Clock, Users } from 'lucide-react'
-import { formatTime, capitalize, difficultyStyle } from '@/utils'
-import type { RecipePreview } from '@/types'
+import Link from "next/link";
+import Image from "next/image";
+import { ChefHat, Clock, Users } from "lucide-react";
+import SaveButton from "./SaveButton";
+import { formatTime, capitalize, difficultyStyle } from "@/utils";
+import type { RecipePreview } from "@/types";
 
-interface RecipeCardProps {
-  recipe: RecipePreview
-  index: number
+interface IProps {
+  recipe: RecipePreview;
+  index: number;
+  initialSaved?: boolean;
+  initialItemId?: string;
 }
 
-export default function RecipeCard({ recipe, index }: RecipeCardProps) {
-  const totalTime = recipe.prep_time + recipe.cook_time
+export default function RecipeCard({
+  recipe,
+  index,
+  initialSaved = false,
+  initialItemId,
+}: IProps) {
+  const totalTime = recipe.prep_time + recipe.cook_time;
 
   return (
-    <Link href={`/recipes/${recipe.id}`} className="group block stagger-item" style={{ '--index': index } as React.CSSProperties}>
+    <Link
+      href={`/recipes/${recipe.id}`}
+      className="group block stagger-item"
+      style={{ "--index": index } as React.CSSProperties}
+    >
       <article className="card overflow-hidden h-full flex flex-col hover:-translate-y-1 transition-transform duration-300">
-
         {/* Image */}
         <div className="relative h-48 overflow-hidden bg-raised">
           {recipe.image_url ? (
@@ -28,7 +39,11 @@ export default function RecipeCard({ recipe, index }: RecipeCardProps) {
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-border-2">
-              <ChefHat size={48} className="text-[--color-border-2]" strokeWidth={1} />
+              <ChefHat
+                size={48}
+                className="text-[--color-border-2]"
+                strokeWidth={1}
+              />
             </div>
           )}
 
@@ -38,6 +53,11 @@ export default function RecipeCard({ recipe, index }: RecipeCardProps) {
               {capitalize(recipe.difficulty)}
             </span>
           </div>
+          <SaveButton
+            recipeId={recipe.id}
+            initialSaved={initialSaved}
+            initialItemId={initialItemId}
+          />
         </div>
 
         {/* Content */}
@@ -65,8 +85,7 @@ export default function RecipeCard({ recipe, index }: RecipeCardProps) {
             </span>
           </div>
         </div>
-
       </article>
     </Link>
-  )
+  );
 }

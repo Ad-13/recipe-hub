@@ -7,11 +7,14 @@ import type { ActionResult, SessionUser } from '@/types'
 import { query } from '@/lib/db'
 
 export async function register(
-  name: string,
-  email: string,
-  password: string
+  _prevState: ActionResult<SessionUser> | null,
+  formData: FormData
 ): Promise<ActionResult<SessionUser>> {
   try {
+    const name = formData.get('name') as string
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+
     const existing = await query<{ id: string }>`
       SELECT id FROM users WHERE email = ${email} LIMIT 1
     `
@@ -50,11 +53,14 @@ export async function register(
 }
 
 export async function login(
-  email: string,
-  password: string
+  _prevState: ActionResult<SessionUser> | null,
+  formData: FormData
 ): Promise<ActionResult<SessionUser>> {
   try {
-    const rows = await query<(SessionUser & { password_hash: string })>`
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+
+    const rows = await query<(SessionUser & { password_hash: string }) >`
       SELECT id, name, email, password_hash
       FROM users
       WHERE email = ${email}

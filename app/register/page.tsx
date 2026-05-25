@@ -1,37 +1,21 @@
 "use client";
 
-import { useState, SubmitEvent } from "react";
+import { useActionState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { register } from "@/actions/auth";
 
 export default function RegisterPage() {
-  const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
 
-  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError(null);
-    setIsLoading(true);
+  const [state, action, isPending] = useActionState(register, null)
 
-    const form = e.currentTarget;
-    const name = (form.elements.namedItem("name") as HTMLInputElement).value;
-    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
-    const password = (form.elements.namedItem("password") as HTMLInputElement)
-      .value;
-
-    const { error } = await register(name, email, password);
-
-    if (error) {
-      setError(error);
-      setIsLoading(false);
-      return;
+  useEffect(() => {
+    if (state?.data) {
+      router.push('/')
+      router.refresh()
     }
-
-    router.push("/");
-    router.refresh();
-  }
+  }, [state])
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4">
@@ -39,22 +23,16 @@ export default function RegisterPage() {
         <h1 className="font-display font-bold text-2xl text-text mb-1">
           Create account
         </h1>
-        <p className="text-text-muted text-sm mb-8">
-          Already have an account?{" "}
-          <Link
-            href="/login"
-            className="text-accent hover:text-accent-2 transition-colors"
-          >
+        <p className="text-text-muted  mb-8">
+          Already have an account?{' '}
+          <Link href="/login" className="text-accent hover:text-accent-2 transition-colors">
             Sign in
           </Link>
         </p>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form action={action} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="name"
-              className="text-sm font-medium text-text-muted"
-            >
+            <label htmlFor="name" className=" font-medium text-text-muted">
               Name
             </label>
             <input
@@ -69,10 +47,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="email"
-              className="text-sm font-medium text-text-muted"
-            >
+            <label htmlFor="email" className=" font-medium text-text-muted">
               Email
             </label>
             <input
@@ -86,10 +61,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="password"
-              className="text-sm font-medium text-text-muted"
-            >
+            <label htmlFor="password" className=" font-medium text-text-muted">
               Password
             </label>
             <input
@@ -103,21 +75,21 @@ export default function RegisterPage() {
             />
           </div>
 
-          {error && (
-            <p className="text-sm text-amber border border-amber/30 bg-amber-soft rounded-md px-3 py-2">
-              {error}
+          {state?.error && (
+            <p className=" text-amber border border-amber/30 bg-amber-soft rounded-md px-3 py-2">
+              {state.error}
             </p>
           )}
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isPending}
             className="btn-primary w-full justify-center mt-2"
           >
-            {isLoading ? "Creating account…" : "Create account"}
+            {isPending ? 'Creating account…' : 'Create account'}
           </button>
         </form>
       </div>
     </div>
-  );
+  )
 }
