@@ -2,9 +2,9 @@
 
 import { cookies } from 'next/headers'
 import bcrypt from 'bcryptjs'
-import { sql } from '@/lib/db'
 import { signToken, verifyToken, COOKIE_NAME } from '@/lib/auth'
 import type { ActionResult, SessionUser } from '@/types'
+import { query } from '@/lib/db'
 
 export async function register(
   name: string,
@@ -12,7 +12,7 @@ export async function register(
   password: string
 ): Promise<ActionResult<SessionUser>> {
   try {
-    const existing = await sql`
+    const existing = await query<{ id: string }>`
       SELECT id FROM users WHERE email = ${email} LIMIT 1
     `
     if (existing.length > 0) {
@@ -21,25 +21,25 @@ export async function register(
 
     const password_hash = await bcrypt.hash(password, 12)
 
-    const [user] = await sql`
+    const [user] = await query<SessionUser>`
       INSERT INTO users (name, email, password_hash)
       VALUES (${name}, ${email}, ${password_hash})
       RETURNING id, name, email
-    ` as SessionUser[]
+    `
 
     const token = await signToken({
       userId: user.id,
-      email:  user.email,
-      name:   user.name,
+      email: user.email,
+      name: user.name,
     })
 
     const cookieStore = await cookies()
     cookieStore.set(COOKIE_NAME, token, {
       httpOnly: true,
-      secure:   process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge:   60 * 60 * 24 * 7, // 7 days in seconds
-      path:     '/',
+      maxAge: 60 * 60 * 24 * 7, // 7 days in seconds
+      path: '/',
     })
 
     return { data: user }
@@ -54,12 +54,12 @@ export async function login(
   password: string
 ): Promise<ActionResult<SessionUser>> {
   try {
-    const rows = await sql`
+    const rows = await query<(SessionUser & { password_hash: string })>`
       SELECT id, name, email, password_hash
       FROM users
       WHERE email = ${email}
       LIMIT 1
-    ` as (SessionUser & { password_hash: string })[]
+    `
 
     if (rows.length === 0) {
       return { error: 'Invalid email or password.' }
@@ -74,17 +74,17 @@ export async function login(
 
     const token = await signToken({
       userId: user.id,
-      email:  user.email,
-      name:   user.name,
+      email: user.email,
+      name: user.name,
     })
 
     const cookieStore = await cookies()
     cookieStore.set(COOKIE_NAME, token, {
       httpOnly: true,
-      secure:   process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge:   60 * 60 * 24 * 7,
-      path:     '/',
+      maxAge: 60 * 60 * 24 * 7,
+      path: '/',
     })
 
     return { data: { id: user.id, email: user.email, name: user.name } }
@@ -107,9 +107,9 @@ export async function getSession(): Promise<SessionUser | null> {
     const payload = await verifyToken(token)
     if (!payload) return null
     return {
-      id:    payload.userId,
+      id: payload.userId,
       email: payload.email,
-      name:  payload.name,
+      name: payload.name,
     }
   } catch {
     return null
