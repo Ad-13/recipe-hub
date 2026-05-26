@@ -34,7 +34,7 @@ export default function NavbarUserMenu({ user }: NavbarUserMenuProps) {
   return (
     <div className="flex items-center gap-3">
       <span className=" text-text-muted">{user.name}</span>
-      <button onClick={handleLogout} className="btn-ghost ">
+      <button onClick={handleLogout} className="btn-secondary ">
         Sign out
       </button>
     </div>

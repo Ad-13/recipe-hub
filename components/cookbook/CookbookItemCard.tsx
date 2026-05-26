@@ -70,31 +70,31 @@ export default function CookbookItemCard({ item }: CookbookItemCardProps) {
               </Link>
             </div>
 
-            <div className="flex items-center gap-1 flex-shrink-0">
+            <div className="flex items-center gap-1 shrink-0">
               <button
                 onClick={() => setIsEditingNote(true)}
-                className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
+                className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${
                   item.notes
                     ? "bg-accent-soft text-accent-2 hover:bg-accent/20"
                     : "text-text-dim hover:bg-raised hover:text-text-muted"
                 }`}
                 aria-label="Edit note"
               >
-                <StickyNote size={13} />
+                <StickyNote size={15} />
               </button>
               <button
                 onClick={handleRemove}
                 disabled={isRemoving}
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-text-dim hover:bg-raised hover:text-accent transition-all"
+                className="w-10 h-10 rounded-lg flex items-center justify-center text-text-muted hover:bg-raised hover:text-accent transition-all"
                 aria-label="Remove"
               >
-                <Trash2 size={13} />
+                <Trash2 size={15} />
               </button>
             </div>
           </div>
 
           {/* Meta */}
-          <div className="flex items-center gap-3 text-text-dim text-xs mb-3">
+          <div className="flex items-center gap-3 text-text-muted text-xs mb-3">
             <span className="flex items-center gap-1">
               <Clock size={11} />
               {formatTime(totalTime)}
@@ -127,13 +127,14 @@ export default function CookbookItemCard({ item }: CookbookItemCardProps) {
               ) : (
                 <button
                   onClick={() => setIsEditingNote(true)}
-                  className="text-left text-xs text-text-dim hover:text-accent transition-colors italic"
+                  className="text-left  text-text-muted hover:text-accent transition-colors italic"
                 >
                   + Add a note…
                 </button>
               )}
             </div>
 
+            {/* textarea */}
             <div
               className={`absolute inset-x-0 bottom-0 bg-surface transition-all duration-300 ${
                 isEditingNote
