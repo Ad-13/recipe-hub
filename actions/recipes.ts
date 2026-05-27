@@ -1,4 +1,5 @@
 'use server'
+import { Recipe } from './../types';
 
 import { sql } from '@/lib/db'
 
@@ -7,7 +8,7 @@ export async function getRecipes() {
     SELECT * FROM recipes
     ORDER BY created_at DESC
   `
-  return recipes
+  return recipes as Recipe[]
 }
 
 export async function getRecipeById(id: string) {
@@ -23,9 +24,6 @@ export async function searchRecipes(query: string) {
     SELECT * FROM recipes
     WHERE
       title ILIKE ${'%' + query + '%'}
-      OR description ILIKE ${'%' + query + '%'}
-      OR kitchen ILIKE ${'%' + query + '%'}
-      OR meal_type ILIKE ${'%' + query + '%'}
     ORDER BY created_at DESC
   `
   return recipes

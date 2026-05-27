@@ -31,3 +31,16 @@ export const MealType = {
 } as const;
 
 export type MealType = typeof MealType[keyof typeof MealType];
+
+export type Recipe = {
+  id: string
+  title: string
+  description: string
+  image_url: string
+  prep_time: number
+  cook_time: number
+  servings: number
+  difficulty: string
+  kitchen: string
+  meal_type: string
+}

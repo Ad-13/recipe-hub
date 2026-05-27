@@ -33,7 +33,11 @@ export default function NavbarUserMenu({ user }: NavbarUserMenuProps) {
 
   return (
     <div className="flex items-center gap-3">
-      <span className=" text-text-muted">{user.name}</span>
+      <span className="text-text-muted">{user.name}</span>
+      <div className="relative">
+        <div className="w-2.5 h-2.5 bg-green-500 rounded-full"></div>
+        <div className="absolute inset-0 w-2.5 h-2.5 bg-green-500 rounded-full animate-ping opacity-75"></div>
+      </div>
       <button onClick={handleLogout} className="btn-secondary ">
         Sign out
       </button>

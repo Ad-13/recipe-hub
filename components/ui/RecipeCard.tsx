@@ -1,18 +1,6 @@
 import Link from 'next/link'
 import { Clock, Users } from 'lucide-react'
-
-type Recipe = {
-  id: string
-  title: string
-  description: string
-  image_url: string
-  prep_time: number
-  cook_time: number
-  servings: number
-  difficulty: string
-  kitchen: string
-  meal_type: string
-}
+import { Recipe } from '@/types'
 
 const difficultyColor: Record<string, string> = {
   easy: 'bg-green-500/80',
@@ -20,7 +8,11 @@ const difficultyColor: Record<string, string> = {
   hard: 'bg-red-500/80',
 }
 
-export default function RecipeCard({ recipe }: { recipe: Recipe }) {
+interface IProps {
+  recipe: Recipe
+}
+
+export default function RecipeCard({ recipe }: IProps) {
   const totalTime = recipe.prep_time + recipe.cook_time
 
   return (
