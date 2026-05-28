@@ -48,13 +48,7 @@ export default async function CookbookPage() {
       ) : (
         <div className="space-y-4">
           {items.map((item, index) => (
-            <div
-              key={item.id}
-              className="stagger-item"
-              style={{ "--index": index } as React.CSSProperties}
-            >
-              <CookbookItemCard item={item} />
-            </div>
+            <CookbookItemCard key={item.id} item={item} index={index} />
           ))}
         </div>
       )}

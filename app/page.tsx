@@ -1,11 +1,15 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Search, BookOpen, Sparkles } from "lucide-react";
 import { getRecipes } from "@/actions/recipes";
-import RecipeCard from "@/components/ui/RecipeCard";
-import Image from "next/image";
+import { getCookbookIds } from "@/actions/cookbook";
+import { getSession } from "@/actions/auth";
+import RecipeCard from "@/components/recipe/RecipeCard";
 
 export default async function HomePage() {
-  const recipes = await getRecipes();
+  const [recipes, session] = await Promise.all([getRecipes(), getSession()]);
+
+  const savedIds = session ? await getCookbookIds() : new Map<string, string>();
   const featured = recipes.slice(0, 6);
 
   return (
@@ -35,7 +39,7 @@ export default async function HomePage() {
                 height={214}
                 loading="eager"
               />
-              <div className="absolute inset-0 bg-bg/70" />
+              <div className="absolute inset-0 bg-bg/60" />
             </div>
             <h1 className="font-display font-bold text-5xl md:text-6xl text-text leading-tight tracking-tight">
               Explore fascinating <br />
@@ -68,7 +72,13 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featured.map((recipe, index) => (
-              <RecipeCard key={recipe.id} recipe={recipe} index={index} />
+              <RecipeCard
+                key={recipe.id}
+                recipe={recipe}
+                index={index}
+                initialSaved={savedIds.has(recipe.id)}
+                initialItemId={savedIds.get(recipe.id)}
+              />
             ))}
           </div>
         </div>

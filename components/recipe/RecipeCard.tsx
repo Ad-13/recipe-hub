@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChefHat, Clock, Users } from "lucide-react";
 import { RecipePreview } from "@/types";
+import SaveButton from "./SaveButton";
 
 const difficultyColor: Record<string, string> = {
   easy: "bg-green-500/80",
@@ -12,9 +13,11 @@ const difficultyColor: Record<string, string> = {
 interface IProps {
   recipe: RecipePreview;
   index: number;
+  initialSaved?: boolean;
+  initialItemId?: string;
 }
 
-export default function RecipeCard({ recipe, index }: IProps) {
+export default function RecipeCard({ recipe, index, initialSaved = false, initialItemId }: IProps) {
   const totalTime = recipe.prep_time + recipe.cook_time;
 
   return (
@@ -49,6 +52,11 @@ export default function RecipeCard({ recipe, index }: IProps) {
           >
             {recipe.difficulty}
           </div>
+          <SaveButton
+            recipeId={recipe.id}
+            initialSaved={initialSaved}
+            initialItemId={initialItemId}
+          />
         </div>
 
         {/* Content */}
