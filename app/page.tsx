@@ -15,7 +15,7 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero section */}
-      <section className="flex-1 flex items-center justify-center px-5 py-16 border-b border-border bg-bg/80 backdrop-blur-md">
+      <section className="flex-1 flex items-center justify-center px-5 py-8 border-b border-border bg-bg/80 backdrop-blur-md">
         <div className="max-w-2xl w-full text-center flex flex-col items-center gap-6">
           {/* Top badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-surface text-text-muted text-sm">
@@ -34,10 +34,10 @@ export default async function HomePage() {
               <Image
                 src="/images/hero-image.jpg"
                 alt=""
-                className="w-full h-full object-cover"
-                width={670}
-                height={214}
-                loading="eager"
+                fill
+                priority
+                className="object-cover"
+                sizes="(max-width: 672px) 100vw, 672px"
               />
               <div className="absolute inset-0 bg-bg/60" />
             </div>
@@ -68,7 +68,7 @@ export default async function HomePage() {
       </section>
 
       {/* Featured recipes */}
-      <section className="px-8 py-16">
+      <section className="px-8 pt-6 pb-16">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featured.map((recipe, index) => (
@@ -78,6 +78,7 @@ export default async function HomePage() {
                 index={index}
                 initialSaved={savedIds.has(recipe.id)}
                 initialItemId={savedIds.get(recipe.id)}
+                priority={index < 3}
               />
             ))}
           </div>

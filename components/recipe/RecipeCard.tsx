@@ -15,9 +15,16 @@ interface IProps {
   index: number;
   initialSaved?: boolean;
   initialItemId?: string;
+  priority?: boolean;
 }
 
-export default function RecipeCard({ recipe, index, initialSaved = false, initialItemId }: IProps) {
+export default function RecipeCard({
+  recipe,
+  index,
+  initialSaved = false,
+  initialItemId,
+  priority,
+}: IProps) {
   const totalTime = recipe.prep_time + recipe.cook_time;
 
   return (
@@ -36,6 +43,7 @@ export default function RecipeCard({ recipe, index, initialSaved = false, initia
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, 33vw"
+              priority={priority}
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-border-2">
