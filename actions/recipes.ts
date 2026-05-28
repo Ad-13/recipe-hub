@@ -1,9 +1,11 @@
 'use server'
+
 import { notFound } from "next/navigation";
 import { query } from '@/lib/db'
 import type { Recipe, RecipePreview, ActionResult } from '@/types'
 
-export async function getAllRecipes(): Promise<RecipePreview[]> {
+
+export async function getRecipes() {
   return query<RecipePreview>`
     SELECT id, title, description, image_url,
            prep_time, cook_time, servings,
@@ -13,7 +15,7 @@ export async function getAllRecipes(): Promise<RecipePreview[]> {
   `
 }
 
-export async function getRecipeById(id: string): Promise<Recipe> {
+export async function getRecipeById(id: string) {
   const rows = await query<Recipe>`
     SELECT * FROM recipes WHERE id = ${id} LIMIT 1
   `
@@ -21,9 +23,8 @@ export async function getRecipeById(id: string): Promise<Recipe> {
   return rows[0]
 }
 
-export async function searchRecipes(
-  searchQuery: string
-): Promise<ActionResult<RecipePreview[]>> {
+
+export async function searchRecipes(searchQuery: string): Promise<ActionResult<RecipePreview[]>> {
   try {
     const data = await query<RecipePreview>(
       `SELECT id, title, description, image_url,
