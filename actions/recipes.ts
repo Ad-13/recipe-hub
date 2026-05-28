@@ -1,30 +1,45 @@
 'use server'
-import { Recipe } from './../types';
 
-import { sql } from '@/lib/db'
+import { notFound } from "next/navigation";
+import { query } from '@/lib/db'
+import type { Recipe, RecipePreview, ActionResult } from '@/types'
+
 
 export async function getRecipes() {
-  const recipes = await sql`
-    SELECT * FROM recipes
+  return query<RecipePreview>`
+    SELECT id, title, description, image_url,
+           prep_time, cook_time, servings,
+           difficulty, kitchen, meal_type, tags
+    FROM recipes
     ORDER BY created_at DESC
   `
-  return recipes as Recipe[]
 }
 
 export async function getRecipeById(id: string) {
-  const recipes = await sql`
-    SELECT * FROM recipes
-    WHERE id = ${id}
+  const rows = await query<Recipe>`
+    SELECT * FROM recipes WHERE id = ${id} LIMIT 1
   `
-  return recipes[0] ?? null
+  if (rows.length === 0) notFound()
+  return rows[0]
 }
 
-export async function searchRecipes(query: string) {
-  const recipes = await sql`
-    SELECT * FROM recipes
-    WHERE
-      title ILIKE ${'%' + query + '%'}
-    ORDER BY created_at DESC
-  `
-  return recipes
+
+export async function searchRecipes(searchQuery: string): Promise<ActionResult<RecipePreview[]>> {
+  try {
+    const data = await query<RecipePreview>(
+      `SELECT id, title, description, image_url,
+              prep_time, cook_time, servings,
+              difficulty, kitchen, meal_type, tags
+       FROM recipes
+       WHERE title ILIKE $1
+          OR description ILIKE $2
+          OR $3 = ANY(tags)
+       ORDER BY created_at DESC
+       LIMIT 50`,
+      [`%${searchQuery}%`, `%${searchQuery}%`, searchQuery]
+    )
+    return { data }
+  } catch {
+    return { error: 'Failed to search recipes.' }
+  }
 }

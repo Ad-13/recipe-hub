@@ -1,9 +1,8 @@
 import type { RecipePreview } from './recipe'
 
-export interface CookbookItem {
+export interface CookbookItem extends RecipePreview {
   id:        string
   recipe_id: string
-  recipe:    RecipePreview
   notes:     string
   added_at:  string
 }

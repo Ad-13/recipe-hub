@@ -32,7 +32,20 @@ export const MealType = {
 
 export type MealType = typeof MealType[keyof typeof MealType];
 
-export type Recipe = {
+export interface Ingredient {
+  amount: string
+  unit: string
+  name: string
+}
+
+export interface NutritionInfo {
+  calories: number
+  protein: number
+  carbs: number
+  fat: number
+}
+
+export interface Recipe {
   id: string
   title: string
   description: string
@@ -40,7 +53,27 @@ export type Recipe = {
   prep_time: number
   cook_time: number
   servings: number
-  difficulty: string
-  kitchen: string
-  meal_type: string
+  difficulty: Difficulty
+  kitchen: Kitchen
+  meal_type: MealType
+  tags: string[]
+  ingredients: Ingredient[]
+  instructions: string[]
+  nutrition: NutritionInfo
+  created_at: string
 }
+
+export type RecipePreview = Pick<
+  Recipe,
+  | 'id'
+  | 'title'
+  | 'description'
+  | 'image_url'
+  | 'prep_time'
+  | 'cook_time'
+  | 'servings'
+  | 'difficulty'
+  | 'kitchen'
+  | 'meal_type'
+  | 'tags'
+>
